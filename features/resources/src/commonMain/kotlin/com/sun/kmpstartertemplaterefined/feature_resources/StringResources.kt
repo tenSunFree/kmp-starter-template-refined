@@ -1,18 +1,3 @@
-/*
- *
- *  *
- *  *  * Copyright (c) 2026
- *  *  *
- *  *  * Author: Athar Gul
- *  *  * GitHub: https://github.com/DevAtrii/Kmp-Starter-Template
- *  *  * YouTube: https://www.youtube.com/@devatrii/videos
- *  *  *
- *  *  * All rights reserved.
- *  *
- *  *
- *
- */
-
 package com.sun.kmpstartertemplaterefined.feature_resources
 
 import androidx.compose.runtime.Composable
@@ -23,12 +8,17 @@ object StarterStringRes {
     val empty = Res.string.empty_string
 }
 
-
 fun StringResource.isEmpty() = this == Res.string.empty_string
-
 
 @Composable
 fun StringResource.toActualString() = stringResource(resource = this)
+// @Composable
+// fun StringResource.toActualString(): String {
+//     val locale = LocalAppLocale.current
+//     return key(locale) {
+//         stringResource(resource = this)
+//     }
+// }
 
 @Composable
 fun StringResource.toActualString(vararg formatArgs: Any) =

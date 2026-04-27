@@ -1,18 +1,3 @@
-/*
- *
- *  *
- *  *  * Copyright (c) 2026
- *  *  *
- *  *  * Author: Athar Gul
- *  *  * GitHub: https://github.com/DevAtrii/Kmp-Starter-Template
- *  *  * YouTube: https://www.youtube.com/@devatrii/videos
- *  *  *
- *  *  * All rights reserved.
- *  *
- *  *
- *
- */
-
 @file:Suppress("DEPRECATION")
 
 package com.sun.kmpstartertemplaterefined.androidapp
@@ -45,7 +30,6 @@ class MainActivity : ComponentActivity() {
         }
     }
 
-
     @Composable
     private fun AndroidSideEffects(
         themeDataStore: ThemeDataStore = koinInject(),
@@ -66,24 +50,4 @@ class MainActivity : ComponentActivity() {
             )
         }
     }
-
-
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

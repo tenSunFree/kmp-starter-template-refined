@@ -1,18 +1,3 @@
-/*
- *
- *  *
- *  *  * Copyright (c) 2026
- *  *  *
- *  *  * Author: Athar Gul
- *  *  * GitHub: https://github.com/DevAtrii/Kmp-Starter-Template
- *  *  * YouTube: https://www.youtube.com/@devatrii/videos
- *  *  *
- *  *  * All rights reserved.
- *  *
- *  *
- *
- */
-
 package com.sun.kmpstartertemplaterefined.core.ui.screens
 
 import androidx.compose.animation.AnimatedVisibility
@@ -47,18 +32,15 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowForward
 import androidx.compose.material.icons.filled.Bolt
 import androidx.compose.material.icons.filled.Code
 import androidx.compose.material.icons.filled.DarkMode
 import androidx.compose.material.icons.filled.LightMode
 import androidx.compose.material.icons.filled.Palette
-import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material.icons.filled.Rocket
 import androidx.compose.material.icons.filled.Star
 import androidx.compose.material.icons.filled.Storage
 import androidx.compose.material.icons.filled.Tune
-import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
@@ -72,7 +54,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -91,7 +72,6 @@ import androidx.compose.ui.unit.sp
 import com.sun.kmpstartertemplaterefined.core.datastore.theme.ThemeDataStore
 import com.sun.kmpstartertemplaterefined.core.events.controllers.SnackbarController
 import com.sun.kmpstartertemplaterefined.core.events.enums.ThemeMode
-import com.sun.kmpstartertemplaterefined.core.platform.platform
 import com.sun.kmpstartertemplaterefined.feature_resources.Res
 import com.sun.kmpstartertemplaterefined.feature_resources.locale.ui.LocaleSelectorDropdown
 import com.sun.kmpstartertemplaterefined.feature_resources.toActualString
@@ -101,13 +81,11 @@ import com.sun.kmpstartertemplaterefined.feature_resources.welcome_screen_title
 import com.sun.kmpstartertemplaterefined.ui_components.lists.ScrollableColumn
 import com.sun.kmpstartertemplaterefined.ui_utils.screen.ScreenSizeValue
 import com.sun.kmpstartertemplaterefined.ui_utils.theme.Dimens
-import com.sun.kmpstartertemplaterefined.ui_utils.theme.isAppInDarkTheme
 import com.sun.kmpstartertemplaterefined.utils.intents.IntentUtils
 import com.sun.kmpstartertemplaterefined.utils.logging.Log
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import org.koin.compose.koinInject
-
 
 @Composable
 fun WelcomeScreen(
