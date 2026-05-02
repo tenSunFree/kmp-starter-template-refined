@@ -1,4 +1,4 @@
-package com.sun.kmpstartertemplaterefined.core.ui.login
+package com.sun.kmpstartertemplaterefined.core.ui.components.login
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -17,6 +17,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -41,6 +42,7 @@ internal fun LoginCard(
     onRememberPasswordChange: (Boolean) -> Unit,
     onPasswordVisibleChange: (Boolean) -> Unit,
     onLoginClick: () -> Unit,
+    onCloseClick: () -> Unit,  // Close card
 ) {
     Surface(
         modifier = Modifier.fillMaxWidth(),
@@ -60,27 +62,28 @@ internal fun LoginCard(
             // Title + Close Icon
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
-                    text = if (loginMode == LoginMode.Normal) {
-                        "歡迎回來"
-                    } else {
-                        "簽約企業用戶登入"
-                    },
+                    text = if (loginMode == LoginMode.Normal) "歡迎回來" else "簽約企業用戶登入",
                     modifier = Modifier.align(Alignment.Center),
-                    color = FundayTextDark,
+                    color = LumaLangTextDark,
                     fontSize = 20.sp,
                     fontWeight = FontWeight.Bold,
                 )
-                Icon(
-                    imageVector = Icons.Outlined.Close,
-                    contentDescription = "關閉",
+                IconButton(
+                    onClick = onCloseClick,
                     modifier = Modifier
                         .align(Alignment.CenterEnd)
-                        .size(24.dp),
-                    tint = Color(0xFFAAAAAA),
-                )
+                        .size(36.dp),
+                ) {
+                    Icon(
+                        imageVector = Icons.Outlined.Close,
+                        contentDescription = "關閉",
+                        modifier = Modifier.size(24.dp),
+                        tint = Color(0xFFAAAAAA),
+                    )
+                }
             }
             Spacer(modifier = Modifier.height(18.dp))
-            // Company ID (displayed only in company mode)
+            // Company ID (displayed only in enterprise mode)
             if (loginMode == LoginMode.Enterprise) {
                 LoginTextField(
                     label = "企業編號",
@@ -119,29 +122,26 @@ internal fun LoginCard(
                     onCheckedChange = onRememberPasswordChange,
                     modifier = Modifier.size(22.dp),
                     colors = CheckboxDefaults.colors(
-                        checkedColor = FundayPink,
+                        checkedColor = LumaLangPink,
                         uncheckedColor = Color(0xFFC8C8C8),
                         checkmarkColor = Color.White,
                     ),
                 )
                 Spacer(modifier = Modifier.width(10.dp))
-                Text(
-                    text = "記住帳號密碼",
-                    color = FundayTextDark,
-                    fontSize = 15.sp,
-                )
+                Text(text = "記住帳號密碼", color = LumaLangTextDark, fontSize = 15.sp)
                 Spacer(modifier = Modifier.weight(1f))
                 if (loginMode == LoginMode.Normal) {
-                    Text(text = "忘記帳號", color = FundayPink, fontSize = 14.sp)
+                    Text(text = "忘記帳號", color = LumaLangPink, fontSize = 14.sp)
                     Spacer(modifier = Modifier.width(6.dp))
-                    Text(text = "忘記密碼", color = FundayPink, fontSize = 14.sp)
+                    Text(text = "忘記密碼", color = LumaLangPink, fontSize = 14.sp)
                 } else {
-                    Text(text = "忘記帳號/密碼", color = FundayPink, fontSize = 14.sp)
+                    Text(text = "忘記帳號/密碼", color = LumaLangPink, fontSize = 14.sp)
                 }
             }
             // Third-party login (only displayed in normal mode)
             if (loginMode == LoginMode.Normal) {
                 Spacer(modifier = Modifier.height(16.dp))
+                // Label: Use default value (or log in via third party)
                 ThirdPartySection()
             }
             Spacer(modifier = Modifier.height(18.dp))
@@ -153,15 +153,11 @@ internal fun LoginCard(
                     .height(48.dp),
                 shape = RoundedCornerShape(6.dp),
                 colors = ButtonDefaults.buttonColors(
-                    containerColor = FundayPink,
+                    containerColor = LumaLangPink,
                     contentColor = Color.White,
                 ),
             ) {
-                Text(
-                    text = "登入",
-                    fontSize = 17.sp,
-                    fontWeight = FontWeight.Medium,
-                )
+                Text(text = "登入", fontSize = 17.sp, fontWeight = FontWeight.Medium)
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.sun.kmpstartertemplaterefined.core.ui.login
+package com.sun.kmpstartertemplaterefined.core.ui.components.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -10,14 +10,14 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import com.sun.kmpstartertemplaterefined.feature_resources.Res
-import com.sun.kmpstartertemplaterefined.feature_resources.funday_login_bg
+import com.sun.kmpstartertemplaterefined.feature_resources.login_bg
 import org.jetbrains.compose.resources.painterResource
 
 @Composable
-internal fun FundayLoginBackground() {
+internal fun LumaLangLoginBackground() {
     Box(modifier = Modifier.fillMaxSize()) {
         Image(
-            painter = painterResource(Res.drawable.funday_login_bg),
+            painter = painterResource(Res.drawable.login_bg),
             contentDescription = null,
             modifier = Modifier.fillMaxSize(),
             contentScale = ContentScale.Crop,

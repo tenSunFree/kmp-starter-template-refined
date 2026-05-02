@@ -1,7 +1,7 @@
 package com.sun.kmpstartertemplaterefined.core.navigation
 
-import com.sun.kmpstartertemplaterefined.core.ui.screens.LoginScreen
-import com.sun.kmpstartertemplaterefined.core.ui.screens.WelcomeScreen
+import com.sun.kmpstartertemplaterefined.core.ui.screens.login.LoginScreen
+import com.sun.kmpstartertemplaterefined.core.ui.screens.welcome.WelcomeScreen
 import com.sun.kmpstartertemplaterefined.feature_core_presentation.screens.OnboardingV1Screen
 import com.sun.kmpstartertemplaterefined.feature_core_presentation.screens.SplashScreen
 import com.sun.kmpstartertemplaterefined.feature_navigation.StarterNavigator
@@ -15,7 +15,7 @@ import org.koin.dsl.navigation3.navigation
 @OptIn(KoinExperimentalAPI::class)
 val navigationModule = module {
     includes(navigationCoreModule)
-    navigation<StarterScreens.Welcome> { route ->
+    navigation<StarterScreens.Welcome> { _ ->
         val navigator = StarterNavigator.getCurrent()
         WelcomeScreen(
             onGetStartedClick = {
@@ -25,7 +25,7 @@ val navigationModule = module {
             }
         )
     }
-    navigation<StarterScreens.Splash> { route ->
+    navigation<StarterScreens.Splash> { _ ->
         val navigator = StarterNavigator.getCurrent()
         SplashScreen(
             onNavigate = {
@@ -40,7 +40,7 @@ val navigationModule = module {
             }
         )
     }
-    navigation<StarterScreens.Onboarding> { route ->
+    navigation<StarterScreens.Onboarding> { _ ->
         val navigator = StarterNavigator.getCurrent()
         OnboardingV1Screen(
             onNavigate = {
@@ -50,7 +50,7 @@ val navigationModule = module {
             }
         )
     }
-    navigation<StarterScreens.Purchases> { route ->
+    navigation<StarterScreens.Purchases> { _ ->
         val navigator = StarterNavigator.getCurrent()
         PurchasesScreen(
             onNavigate = {
@@ -58,7 +58,7 @@ val navigationModule = module {
             }
         )
     }
-    navigation<StarterScreens.Login> { route ->
+    navigation<StarterScreens.Login> { _ ->
         val navigator = StarterNavigator.getCurrent()
         LoginScreen(
             onGetStartedClick = {

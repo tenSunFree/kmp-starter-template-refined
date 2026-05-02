@@ -1,4 +1,4 @@
-package com.sun.kmpstartertemplaterefined.core.ui.login
+package com.sun.kmpstartertemplaterefined.core.ui.components.login
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -44,7 +44,7 @@ internal fun LoginTextField(
         Row {
             Text(
                 text = label,
-                color = FundayTextDark,
+                color = LumaLangTextDark,
                 fontSize = 16.sp,
                 fontWeight = FontWeight.Bold,
             )
@@ -74,7 +74,7 @@ internal fun LoginTextField(
                     .padding(end = if (isPassword) 40.dp else 0.dp),
                 singleLine = true,
                 textStyle = LocalTextStyle.current.copy(
-                    color = FundayTextDark,
+                    color = LumaLangTextDark,
                     fontSize = 16.sp,
                 ),
                 visualTransformation = if (isPassword && !passwordVisible) {

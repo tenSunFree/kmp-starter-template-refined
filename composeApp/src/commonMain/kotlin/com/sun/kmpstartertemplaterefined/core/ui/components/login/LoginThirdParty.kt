@@ -1,4 +1,4 @@
-package com.sun.kmpstartertemplaterefined.core.ui.login
+package com.sun.kmpstartertemplaterefined.core.ui.components.login
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Surface
@@ -18,22 +18,27 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sun.kmpstartertemplaterefined.feature_resources.Res
-import com.sun.kmpstartertemplaterefined.feature_resources.ic_google
+import com.sun.kmpstartertemplaterefined.feature_resources.login_apple
+import com.sun.kmpstartertemplaterefined.feature_resources.login_fb
+import com.sun.kmpstartertemplaterefined.feature_resources.login_google
+import com.sun.kmpstartertemplaterefined.feature_resources.login_line
 import org.jetbrains.compose.resources.painterResource
 
+// The `label` parameter allows both LoginCard and RegisterCard to share this component.
 @Composable
-internal fun ThirdPartySection() {
+internal fun ThirdPartySection(
+    label: String = "或由第三方登入",
+) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         HorizontalDivider(modifier = Modifier.weight(1f), color = Color(0xFFE6E6E6))
         Text(
-            text = "  或由第三方登入  ",
+            text = "  $label  ",
             color = Color(0xFFAAAAAA),
             fontSize = 13.sp,
         )
@@ -50,25 +55,49 @@ internal fun ThirdPartySection() {
             borderColor = Color(0xFFDDDDDD),
         ) {
             Image(
-                painter = painterResource(Res.drawable.ic_google),
-                contentDescription = "Google 登入",
-                modifier = Modifier.size(26.dp),
+                painter = painterResource(Res.drawable.login_google),
+                contentDescription = "Google",
+                modifier = Modifier.fillMaxSize(),
             )
         }
-        SocialButton(modifier = Modifier.weight(1f), bgColor = Color(0xFF1877F2)) {
-            Text(text = "f", color = Color.White, fontSize = 24.sp, fontWeight = FontWeight.Bold)
+        SocialButton(
+            modifier = Modifier.weight(1f),
+            bgColor = Color.White,
+            borderColor = Color(0xFFDDDDDD),
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.login_fb),
+                contentDescription = "FB",
+                modifier = Modifier.fillMaxSize(),
+            )
         }
-        SocialButton(modifier = Modifier.weight(1f), bgColor = Color(0xFF06C755)) {
-            Text(text = "LINE", color = Color.White, fontSize = 13.sp, fontWeight = FontWeight.Bold)
+        SocialButton(
+            modifier = Modifier.weight(1f),
+            bgColor = Color.White,
+            borderColor = Color(0xFFDDDDDD),
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.login_line),
+                contentDescription = "Line",
+                modifier = Modifier.fillMaxSize(),
+            )
         }
-        SocialButton(modifier = Modifier.weight(1f), bgColor = Color(0xFF1C1C1E)) {
-            Text(text = "", color = Color.White, fontSize = 22.sp, fontWeight = FontWeight.Bold)
+        SocialButton(
+            modifier = Modifier.weight(1f),
+            bgColor = Color.White,
+            borderColor = Color(0xFFDDDDDD),
+        ) {
+            Image(
+                painter = painterResource(Res.drawable.login_apple),
+                contentDescription = "Apple",
+                modifier = Modifier.fillMaxSize(),
+            )
         }
     }
 }
 
 @Composable
-private fun SocialButton(
+internal fun SocialButton(
     modifier: Modifier = Modifier,
     bgColor: Color,
     borderColor: Color = Color.Transparent,

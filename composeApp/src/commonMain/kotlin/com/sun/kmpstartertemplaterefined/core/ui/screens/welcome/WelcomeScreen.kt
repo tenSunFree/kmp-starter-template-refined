@@ -1,7 +1,8 @@
-package com.sun.kmpstartertemplaterefined.core.ui.screens
+package com.sun.kmpstartertemplaterefined.core.ui.screens.welcome
 
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.animation.animateColorAsState
+import androidx.compose.animation.core.EaseInOutCubic
 import androidx.compose.animation.core.Spring
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
@@ -644,7 +645,7 @@ private fun DynamicColorToggle(
         targetValue = if (isAnimating) 360f else 0f,
         animationSpec = tween(
             durationMillis = 800,
-            easing = androidx.compose.animation.core.EaseInOutCubic
+            easing = EaseInOutCubic
         ),
         label = "rocket_rotation"
     )
