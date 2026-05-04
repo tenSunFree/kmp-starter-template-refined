@@ -1,6 +1,7 @@
 package com.sun.kmpstartertemplaterefined.core.navigation
 
 import com.sun.kmpstartertemplaterefined.core.ui.screens.login.LoginScreen
+import com.sun.kmpstartertemplaterefined.core.ui.screens.main.MainScreen  // ✅ 新增 import
 import com.sun.kmpstartertemplaterefined.core.ui.screens.welcome.WelcomeScreen
 import com.sun.kmpstartertemplaterefined.feature_core_presentation.screens.OnboardingV1Screen
 import com.sun.kmpstartertemplaterefined.feature_core_presentation.screens.SplashScreen
@@ -15,6 +16,7 @@ import org.koin.dsl.navigation3.navigation
 @OptIn(KoinExperimentalAPI::class)
 val navigationModule = module {
     includes(navigationCoreModule)
+
     navigation<StarterScreens.Welcome> { _ ->
         val navigator = StarterNavigator.getCurrent()
         WelcomeScreen(
@@ -25,6 +27,7 @@ val navigationModule = module {
             }
         )
     }
+
     navigation<StarterScreens.Splash> { _ ->
         val navigator = StarterNavigator.getCurrent()
         SplashScreen(
@@ -40,6 +43,7 @@ val navigationModule = module {
             }
         )
     }
+
     navigation<StarterScreens.Onboarding> { _ ->
         val navigator = StarterNavigator.getCurrent()
         OnboardingV1Screen(
@@ -50,6 +54,7 @@ val navigationModule = module {
             }
         )
     }
+
     navigation<StarterScreens.Purchases> { _ ->
         val navigator = StarterNavigator.getCurrent()
         PurchasesScreen(
@@ -58,12 +63,20 @@ val navigationModule = module {
             }
         )
     }
+
+    // After successful login, navigate to Main and clear the entire backstack
+    // to prevent redirection to the login page
     navigation<StarterScreens.Login> { _ ->
         val navigator = StarterNavigator.getCurrent()
         LoginScreen(
             onGetStartedClick = {
-                navigator.navigateTo(route = StarterScreens.Purchases)
+                navigator.popAllAndNavigate(route = StarterScreens.Main)
             }
         )
+    }
+
+    // Main route
+    navigation<StarterScreens.Main> { _ ->
+        MainScreen()
     }
 }
