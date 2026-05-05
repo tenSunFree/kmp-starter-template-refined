@@ -1,25 +1,16 @@
-@file:Suppress("DEPRECATION")
-
 package com.sun.kmpstartertemplaterefined.androidapp
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.graphics.Color
-import com.google.accompanist.systemuicontroller.SystemUiController
-import com.google.accompanist.systemuicontroller.rememberSystemUiController
+import androidx.compose.runtime.SideEffect
+import androidx.compose.ui.platform.LocalView
+import androidx.core.view.WindowCompat
 import com.sun.kmpstartertemplaterefined.App
-import com.sun.kmpstartertemplaterefined.core.datastore.theme.ThemeDataStore
-import com.sun.kmpstartertemplaterefined.core.events.enums.ThemeMode
-import com.sun.kmpstartertemplaterefined.ui_utils.side_effects.ObserveAsEvents
-import org.koin.compose.koinInject
 
 class MainActivity : ComponentActivity() {
-
-    private val activity = this
 
     override fun onCreate(savedInstanceState: Bundle?) {
         enableEdgeToEdge()
@@ -31,23 +22,13 @@ class MainActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun AndroidSideEffects(
-        themeDataStore: ThemeDataStore = koinInject(),
-        systemUiController: SystemUiController = rememberSystemUiController(),
-    ) {
-        val isSystemInDarkTheme = isSystemInDarkTheme()
-        ObserveAsEvents(
-            flow = themeDataStore.themeMode
-        ) { themeMode ->
-            val darkIcons = when (themeMode) {
-                ThemeMode.LIGHT -> true
-                ThemeMode.DARK -> false
-                ThemeMode.SYSTEM -> !isSystemInDarkTheme
-            }
-            systemUiController.setStatusBarColor(
-                color = Color.Transparent,
-                darkIcons = darkIcons
-            )
+    private fun AndroidSideEffects() {
+        val view = LocalView.current
+        SideEffect {
+            val window = (view.context as ComponentActivity).window
+            // White as the default color for the entire screen (applies to dark backgrounds for Splash and Login).
+            WindowCompat.getInsetsController(window, view)
+                .isAppearanceLightStatusBars = false
         }
     }
 }

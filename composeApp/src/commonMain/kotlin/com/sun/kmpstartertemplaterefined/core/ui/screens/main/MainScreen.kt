@@ -64,6 +64,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.sun.kmpstartertemplaterefined.core.ui.system.SetStatusBarStyle
 
 // Color definition (consistent with LoginColors)
 private val Pink = Color(0xFFFF3F68)
@@ -75,6 +76,7 @@ private val TabUnselected = Color(0xFFC5C5C5)
 // MainScreen: The container for the entire main screen
 @Composable
 fun MainScreen() {
+    SetStatusBarStyle(darkIcons = true) // black
     var selectedBottomIndex by remember { mutableIntStateOf(0) }
     Scaffold(
         modifier = Modifier.fillMaxSize(),
@@ -179,6 +181,7 @@ private fun EasyLearningScreen() {
             3 -> EmptyPlaceholderScreen("音樂")
             4 -> EmptyPlaceholderScreen("童話")
             5 -> EmptyPlaceholderScreen("專欄")
+            6 -> EmptyPlaceholderScreen("大補帖")
         }
     }
 }
