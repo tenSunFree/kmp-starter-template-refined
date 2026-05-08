@@ -15,8 +15,12 @@ import androidx.compose.foundation.layout.windowInsetsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,33 +39,43 @@ import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.LoginM
 import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.LoginTopBar
 import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.RegisterCard
 import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.SwitchLoginModeButton
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.RegisterAction
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.RegisterViewModel
+import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
     onGetStartedClick: () -> Unit,
-    onRegisterSubmitClick: () -> Unit = {},
+    onRegisterSuccess: () -> Unit = {},
+    registerViewModel: RegisterViewModel = koinViewModel(),
 ) {
-    // Screen Status
+    val registerState by registerViewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
     var overlayState by remember { mutableStateOf(LoginOverlayState.None) }
-    // LoginCard status
     var loginMode by remember { mutableStateOf(LoginMode.Normal) }
     var companyNo by remember { mutableStateOf("") }
     var account by remember { mutableStateOf("") }
     var password by remember { mutableStateOf("") }
     var rememberPassword by remember { mutableStateOf(false) }
     var passwordVisible by remember { mutableStateOf(false) }
-    // RegisterCard status
-    var phone by remember { mutableStateOf("") }
-    var name by remember { mutableStateOf("") }
-    var gender by remember { mutableStateOf("男") }
+    LaunchedEffect(registerState.isSuccess) {
+        if (registerState.isSuccess) {
+            overlayState = LoginOverlayState.None
+            onRegisterSuccess()
+        }
+    }
+    LaunchedEffect(registerState.errorMessage) {
+        registerState.errorMessage?.let { msg ->
+            snackbarHostState.showSnackbar(msg)
+            registerViewModel.onAction(RegisterAction.ErrorShown)
+        }
+    }
     Box(
         modifier = Modifier
             .fillMaxSize()
             .background(LumaLangBlue),
     ) {
-        // Background image
         LumaLangLoginBackground()
-        // Main content layer
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -69,18 +83,14 @@ fun LoginScreen(
                 .windowInsetsPadding(WindowInsets.navigationBars)
                 .padding(horizontal = 26.dp),
         ) {
-            // Always displayed in the TopBar
             LoginTopBar(
                 modifier = Modifier.align(Alignment.TopCenter),
                 onMemberLoginClick = {
-                    // Resets to normal mode every time you click member login
                     loginMode = LoginMode.Normal
                     overlayState = LoginOverlayState.Login
                 },
             )
-            // Display corresponding content based on status
             when (overlayState) {
-                // Initial screen: Only the "Join for Free" button is displayed at the bottom.
                 LoginOverlayState.None -> {
                     Button(
                         onClick = { overlayState = LoginOverlayState.Register },
@@ -102,23 +112,55 @@ fun LoginScreen(
                         )
                     }
                 }
-                // After clicking "Join for Free": RegisterCard is displayed.
                 LoginOverlayState.Register -> {
                     RegisterCard(
                         modifier = Modifier
                             .align(Alignment.Center)
                             .fillMaxWidth(),
-                        phone = phone,
-                        name = name,
-                        selectedGender = gender,
-                        onPhoneChange = { phone = it },
-                        onNameChange = { name = it },
-                        onGenderSelect = { gender = it },
+                        email = registerState.email,
+                        username = registerState.username,
+                        password = registerState.password,
+                        passwordVisible = registerState.passwordVisible,
+                        phone = registerState.phone,
+                        fullName = registerState.fullName,
+                        selectedGender = registerState.gender,
+                        isLoading = registerState.isLoading,
+                        onEmailChange = { registerViewModel.onAction(RegisterAction.EmailChanged(it)) },
+                        onUsernameChange = {
+                            registerViewModel.onAction(
+                                RegisterAction.UsernameChanged(
+                                    it
+                                )
+                            )
+                        },
+                        onPasswordChange = {
+                            registerViewModel.onAction(
+                                RegisterAction.PasswordChanged(
+                                    it
+                                )
+                            )
+                        },
+                        onTogglePasswordVisible = { registerViewModel.onAction(RegisterAction.TogglePasswordVisible) },
+                        onPhoneChange = { registerViewModel.onAction(RegisterAction.PhoneChanged(it)) },
+                        onFullNameChange = {
+                            registerViewModel.onAction(
+                                RegisterAction.FullNameChanged(
+                                    it
+                                )
+                            )
+                        },
+                        onGenderSelect = {
+                            registerViewModel.onAction(
+                                RegisterAction.GenderChanged(
+                                    it
+                                )
+                            )
+                        },
                         onCloseClick = { overlayState = LoginOverlayState.None },
-                        onSubmitClick = onRegisterSubmitClick,
+                        onSubmitClick = { registerViewModel.onAction(RegisterAction.SubmitClicked) },
                     )
                 }
-                // After clicking "Member Login": LoginCard + SwitchLoginModeButton will be displayed.
+
                 LoginOverlayState.Login -> {
                     Column(
                         modifier = Modifier
@@ -155,5 +197,10 @@ fun LoginScreen(
                 }
             }
         }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+        )
     }
 }

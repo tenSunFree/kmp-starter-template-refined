@@ -9,11 +9,14 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.RadioButton
@@ -31,11 +34,20 @@ import androidx.compose.ui.unit.sp
 @Composable
 internal fun RegisterCard(
     modifier: Modifier = Modifier,
+    email: String,
+    username: String,
+    password: String,
+    passwordVisible: Boolean,
     phone: String,
-    name: String,
+    fullName: String,
     selectedGender: String,
+    isLoading: Boolean,
+    onEmailChange: (String) -> Unit,
+    onUsernameChange: (String) -> Unit,
+    onPasswordChange: (String) -> Unit,
+    onTogglePasswordVisible: () -> Unit,
     onPhoneChange: (String) -> Unit,
-    onNameChange: (String) -> Unit,
+    onFullNameChange: (String) -> Unit,
     onGenderSelect: (String) -> Unit,
     onCloseClick: () -> Unit,
     onSubmitClick: () -> Unit,
@@ -47,15 +59,11 @@ internal fun RegisterCard(
         shadowElevation = 4.dp,
     ) {
         Column(
-            modifier = Modifier.padding(
-                start = 24.dp,
-                end = 24.dp,
-                top = 22.dp,
-                bottom = 20.dp,
-            ),
+            modifier = Modifier
+                .padding(start = 24.dp, end = 24.dp, top = 22.dp, bottom = 20.dp)
+                .verticalScroll(rememberScrollState()),
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            // Title + X button
             Box(modifier = Modifier.fillMaxWidth()) {
                 Text(
                     text = "免費加入",
@@ -66,9 +74,7 @@ internal fun RegisterCard(
                 )
                 IconButton(
                     onClick = onCloseClick,
-                    modifier = Modifier
-                        .align(Alignment.CenterEnd)
-                        .size(36.dp),
+                    modifier = Modifier.align(Alignment.CenterEnd).size(36.dp),
                 ) {
                     Icon(
                         imageVector = Icons.Outlined.Close,
@@ -78,31 +84,63 @@ internal fun RegisterCard(
                     )
                 }
             }
+
             Spacer(modifier = Modifier.height(18.dp))
-            // phone number
+
+            LoginTextField(
+                label = "Email",
+                value = email,
+                placeholder = "請輸入 Email",
+                onValueChange = onEmailChange,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LoginTextField(
+                label = "帳號",
+                value = username,
+                placeholder = "請輸入帳號",
+                onValueChange = onUsernameChange,
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
+            LoginTextField(
+                label = "密碼",
+                value = password,
+                placeholder = "請輸入密碼",
+                onValueChange = onPasswordChange,
+                isPassword = true,
+                passwordVisible = passwordVisible,
+                onPasswordVisibleChange = { onTogglePasswordVisible() },
+            )
+
+            Spacer(modifier = Modifier.height(16.dp))
+
             LoginTextField(
                 label = "手機號碼",
                 value = phone,
                 placeholder = "請輸入手機號碼",
                 onValueChange = onPhoneChange,
             )
+
             Spacer(modifier = Modifier.height(16.dp))
-            // Name + Gender (side by side)
+
             Row(
                 modifier = Modifier.fillMaxWidth(),
                 verticalAlignment = Alignment.Top,
             ) {
-                // Name
                 Box(modifier = Modifier.weight(1f)) {
                     LoginTextField(
                         label = "姓名",
-                        value = name,
+                        value = fullName,
                         placeholder = "請輸入姓名",
-                        onValueChange = onNameChange,
+                        onValueChange = onFullNameChange,
                     )
                 }
+
                 Spacer(modifier = Modifier.width(16.dp))
-                // gender
+
                 Column(modifier = Modifier.weight(1f)) {
                     Text(
                         text = "性別",
@@ -115,43 +153,51 @@ internal fun RegisterCard(
                         RadioButton(
                             selected = selectedGender == "男",
                             onClick = { onGenderSelect("男") },
-                            colors = RadioButtonDefaults.colors(
-                                selectedColor = LumaLangPink,
-                            ),
+                            colors = RadioButtonDefaults.colors(selectedColor = LumaLangPink),
                         )
                         Text(text = "男", fontSize = 15.sp, color = LumaLangTextDark)
                         Spacer(modifier = Modifier.width(8.dp))
                         RadioButton(
                             selected = selectedGender == "女",
                             onClick = { onGenderSelect("女") },
-                            colors = RadioButtonDefaults.colors(
-                                selectedColor = LumaLangPink,
-                            ),
+                            colors = RadioButtonDefaults.colors(selectedColor = LumaLangPink),
                         )
                         Text(text = "女", fontSize = 15.sp, color = LumaLangTextDark)
                     }
                 }
             }
+
             Spacer(modifier = Modifier.height(20.dp))
-            // Other joining methods (share ThirdPartySection, change the label to "Other joining methods")
+
             ThirdPartySection(label = "其他加入方式")
+
             Spacer(modifier = Modifier.height(20.dp))
-            // Send button
+
             Button(
                 onClick = onSubmitClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .height(48.dp),
+                enabled = !isLoading,
+                modifier = Modifier.fillMaxWidth().height(48.dp),
                 shape = RoundedCornerShape(6.dp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = LumaLangPink,
                     contentColor = Color.White,
+                    disabledContainerColor = LumaLangPink.copy(alpha = 0.6f),
+                    disabledContentColor = Color.White,
                 ),
             ) {
-                Text(text = "送出", fontSize = 17.sp, fontWeight = FontWeight.Medium)
+                if (isLoading) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(20.dp),
+                        color = Color.White,
+                        strokeWidth = 2.dp,
+                    )
+                } else {
+                    Text(text = "送出", fontSize = 17.sp, fontWeight = FontWeight.Medium)
+                }
             }
+
             Spacer(modifier = Modifier.height(14.dp))
-            // Terms of Service
+
             Text(
                 text = "加入即代表同意LumaLang的服務條款與隱私權",
                 color = Color(0xFFB8B8B8),

@@ -58,3 +58,7 @@ include(":features:purchases:presentation")
 include(":features:your-feature:presentation")
 include(":features:your-feature:domain")
 include(":features:your-feature:data")
+/*Feature: Auth*/
+include(":features:auth:domain")
+include(":features:auth:data")
+include(":features:auth:presentation")

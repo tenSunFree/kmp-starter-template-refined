@@ -81,12 +81,14 @@ kotlin {
             implementation(projects.features.core.data)
             implementation(projects.features.core.domain)
             implementation(projects.features.core.presentation)
-
             // Feature Your Feature
             implementation(projects.features.yourFeature.data)
             implementation(projects.features.yourFeature.domain)
             implementation(projects.features.yourFeature.presentation)
-
+            // Feature Auth
+            implementation(projects.features.auth.data)
+            implementation(projects.features.auth.domain)
+            implementation(projects.features.auth.presentation)
         }
         iosMain.dependencies {
 

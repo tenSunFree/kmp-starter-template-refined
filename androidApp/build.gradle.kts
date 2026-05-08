@@ -1,3 +1,5 @@
+import java.util.Properties
+
 private fun getVersionCode(): Int {
     val versionMajor = libs.versions.app.version.major.get().toInt()
     val versionMinor = libs.versions.app.version.minor.get().toInt()
@@ -17,6 +19,18 @@ plugins {
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.google.services)
 }
+
+val localProps = Properties().apply {
+    rootProject.file("local.properties")
+        .takeIf { it.exists() }
+        ?.inputStream()
+        ?.use { load(it) }
+}
+
+val authBaseUrl: String = localProps.getProperty(
+    "AUTH_BASE_URL",
+    "http://10.0.2.2:8080/api/v1"  // Default value: Android emulator
+)
 
 android {
     namespace = "com.sun.kmpstartertemplaterefined.androidapp"
@@ -38,6 +52,11 @@ android {
         val buildMessage = "versionCode: $versionCode, versionName: $versionName"
         println(buildMessage)
 
+        buildConfigField(
+            "String",
+            "AUTH_BASE_URL",
+            "\"$authBaseUrl\""
+        )
     }
     packaging {
         resources {

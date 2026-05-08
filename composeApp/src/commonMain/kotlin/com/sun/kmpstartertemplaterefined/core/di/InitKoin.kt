@@ -1,18 +1,3 @@
-/*
- *
- *  *
- *  *  * Copyright (c) 2026
- *  *  *
- *  *  * Author: Athar Gul
- *  *  * GitHub: https://github.com/DevAtrii/Kmp-Starter-Template
- *  *  * YouTube: https://www.youtube.com/@devatrii/videos
- *  *  *
- *  *  * All rights reserved.
- *  *
- *  *
- *
- */
-
 package com.sun.kmpstartertemplaterefined.core.di
 
 import com.sun.kmpstartertemplaterefined.core.KmpAppInitializer
@@ -20,6 +5,10 @@ import com.sun.kmpstartertemplaterefined.core.datastore.di.dataStoreModule
 import com.sun.kmpstartertemplaterefined.core.events.di.eventsModule
 import com.sun.kmpstartertemplaterefined.core.navigation.navigationModule
 import com.sun.kmpstartertemplaterefined.feature_analytics_data.di.analyticsDataModule
+import com.sun.kmpstartertemplaterefined.feature_auth_data.config.AuthConfig
+import com.sun.kmpstartertemplaterefined.feature_auth_data.di.authDataModule
+import com.sun.kmpstartertemplaterefined.feature_auth_domain.di.authDomainModule
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.di.authPresentationModule
 import com.sun.kmpstartertemplaterefined.feature_core_data.di.coreDataModule
 import com.sun.kmpstartertemplaterefined.feature_core_domain.di.coreDomainModule
 import com.sun.kmpstartertemplaterefined.feature_core_presentation.di.corePresentationModule
@@ -69,6 +58,9 @@ private val starterModules = module {
         notificationsCoreModule,
         notificationsLocalModule,
         notificationsPushModule,
+        /*Feature: Auth*/
+        authDomainModule,
+        authPresentationModule,
     )
 }
 
@@ -76,35 +68,21 @@ private val kmpAppInitializerModule = module {
     singleOf(::KmpAppInitializer)
 }
 
-internal fun initKoin(config: KoinAppDeclaration? = null) {
+internal fun initKoin(
+    authBaseUrl: String = "http://10.0.2.2:8080/api/v1",
+    config: KoinAppDeclaration? = null,
+) {
     startKoin {
         config?.invoke(this)
         modules(
             starterModules,
             kmpAppInitializerModule,
-            /* Add Modules Here */
+            /*Feature: Auth - data need baseUrl*/
+            authDataModule(AuthConfig(baseUrl = authBaseUrl)),
+            /*Your Feature*/
             featureYourDataModule,
             featureYourDomainModule,
-            featureYourPresentationModule
+            featureYourPresentationModule,
         )
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
