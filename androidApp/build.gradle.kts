@@ -87,4 +87,6 @@ dependencies {
 
     implementation(projects.composeApp)
     implementation(libs.accompanist.system.ui.controller)
+
+    testImplementation(libs.junit)
 }

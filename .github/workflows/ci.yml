@@ -1,0 +1,77 @@
+name: KMP CI
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+  pull_request:
+    branches: [ main, develop ]
+
+concurrency:
+  group: kmp-ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  ci:
+    name: Lint, Test & Build Android Debug
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout
+      - name: Checkout source code
+        uses: actions/checkout@v4
+
+      # Java 17
+      # Corresponding to JavaVersion.VERSION_17 in androidApp/build.gradle.kts
+      - name: Setup Java
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      # Gradle Setup + Cache
+      # gradle/actions/setup-gradle automatically handles all caches
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      # gradlew execute permissions
+      - name: Grant execute permission for gradlew
+        run: chmod +x ./gradlew
+
+      # Dynamically generate local.properties
+      # local.properties will not be uploaded to .gitignore
+      # CI can use the default emulator address; this is just to ensure the build runs.
+      - name: Create local.properties
+        run: |
+          echo "AUTH_BASE_URL=http://10.0.2.2:8080/api/v1" > local.properties
+
+      # Display Gradle version (for easier debugging of CI logs)
+      - name: Show Gradle version
+        run: ./gradlew --version
+
+      # Android Lint
+      # Only run the lint for the Android app to avoid triggering iOS/Native tasks (Ubuntu does not have Xcode)
+      - name: Run Android Lint
+        run: ./gradlew :androidApp:lint --stacktrace
+
+      # Android Unit Tests
+      # Run unit tests in androidApp module only (androidApp has standard testDebugUnitTest task)
+      # composeApp uses KMP library plugin (AGP 9.x), which does not support Android unit tests yet
+      - name: Run unit tests
+        run: ./gradlew :androidApp:testDebugUnitTest --stacktrace
+
+      # Build Debug APK
+      - name: Build Android debug APK
+        run: ./gradlew :androidApp:assembleDebug --stacktrace
+
+      # Upload APK artifact
+      # Make the APK from this build available for direct download from the GitHub Actions page
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: debug-apk-${{ github.sha }}
+          path: androidApp/build/outputs/apk/debug/*.apk
+          retention-days: 7
