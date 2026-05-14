@@ -5,8 +5,12 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -16,52 +20,90 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sun.kmpstartertemplaterefined.core.ui.screens.main.tabs.shared.TabSearchBar
+import com.sun.kmpstartertemplaterefined.feature_lessons_domain.models.Lesson
+import com.sun.kmpstartertemplaterefined.feature_lessons_presentation.LessonsAction
+import com.sun.kmpstartertemplaterefined.feature_lessons_presentation.LessonsViewModel
 import com.sun.kmpstartertemplaterefined.ui_components.image.CoilImage
+import org.koin.compose.viewmodel.koinViewModel
 
 private val TextDark = Color(0xFF4A4A4A)
 
-data class VideoUi(
-    val title: String,
-    val subtitle: String,
-    val views: Int,
-    val imageUrl: String,
-    val tag: String = "中英字幕",
-)
-
-val fakeVideos = listOf(
-    VideoUi(
-        title = "LumaLang Cinephile 電影迷 | Paterson 派特森",
-        subtitle = "LumaLang | CINEPHILE  看電影學英文",
-        views = 975,
-        imageUrl = "https://picsum.photos/seed/video_1/900/520",
-    ),
-    VideoUi(
-        title = "「不要為流量犧牲全部價值」想當YouTuber前，你必須知道的現實",
-        subtitle = "LumaLang Chat",
-        views = 576,
-        imageUrl = "https://picsum.photos/seed/video_2/900/520",
-    ),
-)
-
 @Composable
-fun VideoTab() {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .verticalScroll(rememberScrollState())
-            .padding(horizontal = 16.dp, vertical = 16.dp),
-    ) {
-        TabSearchBar()
-        Spacer(modifier = Modifier.height(20.dp))
-        fakeVideos.forEach { video ->
-            VideoCard(video = video)
-            Spacer(modifier = Modifier.height(24.dp))
+fun VideoTab(
+    viewModel: LessonsViewModel = koinViewModel(),
+) {
+    val state by viewModel.state.collectAsState()
+    val snackbarHostState = remember { SnackbarHostState() }
+    // Automatic loading upon entering the screen
+    LaunchedEffect(Unit) {
+        viewModel.onAction(LessonsAction.LoadLessons)
+    }
+    // Display errors using a Snackbar, then clear them after displaying.
+    LaunchedEffect(state.errorMessage) {
+        state.errorMessage?.let { msg ->
+            snackbarHostState.showSnackbar(msg)
+            viewModel.onAction(LessonsAction.ErrorShown)
         }
+    }
+    Box(modifier = Modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .verticalScroll(rememberScrollState())
+                .padding(horizontal = 16.dp, vertical = 16.dp),
+        ) {
+            TabSearchBar()
+            Spacer(modifier = Modifier.height(20.dp))
+            when {
+                // Loading for the first time
+                state.isLoading && state.lessons.isEmpty() -> {
+                    Box(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(240.dp),
+                        contentAlignment = Alignment.Center,
+                    ) {
+                        CircularProgressIndicator()
+                    }
+                }
+                // Loaded successfully but no data (or empty after error)
+                state.lessons.isEmpty() -> {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(top = 60.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally,
+                    ) {
+                        Text(
+                            text = "目前沒有影片",
+                            color = TextDark,
+                            fontSize = 18.sp,
+                            fontWeight = FontWeight.Bold,
+                        )
+                        Spacer(modifier = Modifier.height(12.dp))
+                        Button(onClick = { viewModel.onAction(LessonsAction.RetryClicked) }) {
+                            Text("重新載入")
+                        }
+                    }
+                }
+                // Information available
+                else -> {
+                    state.lessons.forEach { lesson ->
+                        VideoCard(lesson = lesson)
+                        Spacer(modifier = Modifier.height(24.dp))
+                    }
+                }
+            }
+        }
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter),
+        )
     }
 }
 
 @Composable
-fun VideoCard(video: VideoUi) {
+fun VideoCard(lesson: Lesson) {
     Column(modifier = Modifier.fillMaxWidth()) {
         Box(
             modifier = Modifier
@@ -72,8 +114,8 @@ fun VideoCard(video: VideoUi) {
         ) {
             CoilImage(
                 modifier = Modifier.fillMaxSize(),
-                url = video.imageUrl,
-                contentDescription = video.title,
+                url = lesson.coverUrl,
+                contentDescription = lesson.title,
                 contentScale = ContentScale.Crop,
             )
             Box(
@@ -84,7 +126,7 @@ fun VideoCard(video: VideoUi) {
                     .padding(vertical = 10.dp, horizontal = 12.dp),
             ) {
                 Text(
-                    text = video.subtitle,
+                    text = lesson.subtitle,
                     color = Color.White,
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Medium,
@@ -92,9 +134,12 @@ fun VideoCard(video: VideoUi) {
             }
         }
         Spacer(modifier = Modifier.height(8.dp))
-        Row(modifier = Modifier.fillMaxWidth(), verticalAlignment = Alignment.CenterVertically) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
             Text(
-                text = video.tag,
+                text = lesson.tags.firstOrNull() ?: lesson.level,
                 color = Color(0xFF888888),
                 fontSize = 12.sp,
                 modifier = Modifier
@@ -103,11 +148,15 @@ fun VideoCard(video: VideoUi) {
                     .padding(horizontal = 6.dp, vertical = 2.dp),
             )
             Spacer(modifier = Modifier.weight(1f))
-            Text(text = "👁 ${video.views}次", color = Color(0xFF999999), fontSize = 13.sp)
+            Text(
+                text = "👁 ${lesson.viewCount}次",
+                color = Color(0xFF999999),
+                fontSize = 13.sp,
+            )
         }
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = video.title,
+            text = lesson.title,
             color = TextDark,
             fontSize = 20.sp,
             fontWeight = FontWeight.ExtraBold,

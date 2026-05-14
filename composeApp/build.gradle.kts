@@ -89,6 +89,10 @@ kotlin {
             implementation(projects.features.auth.data)
             implementation(projects.features.auth.domain)
             implementation(projects.features.auth.presentation)
+            // Feature Lessons
+            implementation(projects.features.lessons.data)
+            implementation(projects.features.lessons.domain)
+            implementation(projects.features.lessons.presentation)
         }
         iosMain.dependencies {
 

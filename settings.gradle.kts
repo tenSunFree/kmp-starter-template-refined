@@ -62,3 +62,7 @@ include(":features:your-feature:data")
 include(":features:auth:domain")
 include(":features:auth:data")
 include(":features:auth:presentation")
+/*Feature: Lessons*/
+include(":features:lessons:domain")
+include(":features:lessons:data")
+include(":features:lessons:presentation")

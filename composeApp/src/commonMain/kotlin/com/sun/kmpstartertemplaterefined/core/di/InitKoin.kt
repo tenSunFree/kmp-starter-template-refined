@@ -30,6 +30,9 @@ import org.koin.core.context.startKoin
 import org.koin.core.module.dsl.singleOf
 import org.koin.dsl.KoinAppDeclaration
 import org.koin.dsl.module
+import com.sun.kmpstartertemplaterefined.feature_lessons_data.di.lessonsDataModule
+import com.sun.kmpstartertemplaterefined.feature_lessons_domain.di.lessonsDomainModule
+import com.sun.kmpstartertemplaterefined.feature_lessons_presentation.di.lessonsPresentationModule
 
 private val starterModules = module {
     includes(
@@ -61,6 +64,9 @@ private val starterModules = module {
         /*Feature: Auth*/
         authDomainModule,
         authPresentationModule,
+        /*Feature: Lessons*/
+        lessonsDomainModule,
+        lessonsPresentationModule,
     )
 }
 
@@ -79,6 +85,8 @@ internal fun initKoin(
             kmpAppInitializerModule,
             /*Feature: Auth - data need baseUrl*/
             authDataModule(AuthConfig(baseUrl = authBaseUrl)),
+            /*Feature: Lessons - data need baseUrl*/
+            lessonsDataModule(baseUrl = authBaseUrl),
             /*Your Feature*/
             featureYourDataModule,
             featureYourDomainModule,

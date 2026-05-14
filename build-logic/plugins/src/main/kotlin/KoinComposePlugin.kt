@@ -1,18 +1,3 @@
-/*
- *
- *  *
- *  *  * Copyright (c) 2026
- *  *  *
- *  *  * Author: Athar Gul
- *  *  * GitHub: https://github.com/DevAtrii/Kmp-Starter-Template
- *  *  * YouTube: https://www.youtube.com/@devatrii/videos
- *  *  *
- *  *  * All rights reserved.
- *  *
- *  *
- *
- */
-
 import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.artifacts.VersionCatalogsExtension
@@ -26,7 +11,6 @@ class KoinComposePlugin : Plugin<Project> {
             with(pluginManager) {
                 apply("com.sun.kmpstartertemplaterefined.plugins.koin")
             }
-
             val kotlinMultiplatformExtension = extensions.getByType<KotlinMultiplatformExtension>()
             with(kotlinMultiplatformExtension) {
                 with(sourceSets) {

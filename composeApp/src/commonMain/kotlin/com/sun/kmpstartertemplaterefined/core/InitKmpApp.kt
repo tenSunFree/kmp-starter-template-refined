@@ -34,21 +34,17 @@ fun initKmpApp(
     // 1. Dependency Injection Setup
     // Starts Koin. This must happen before any 'inject()' or 'get()' calls.
     initKoin(authBaseUrl = authBaseUrl, config = koinConfig)
-
     // 2. Core SDK Configuration
     // Sets up the fundamental API keys used by the underlying library modules.
     KmpStarter.initApp(
         revenueCatApiKey = AppConstants.REVENUE_CAT_API_KEY,
         mixPanelApiKey = AppConstants.MIXPANEL_API_TOKEN
     )
-
     // 3. Feature-Specific Initialization (YOU CAN INIT OTHER STUFF HERE)
     // Configures platform-specific billing and remote toggle logic.
     initRevenueCat()
     initRemoteConfig()
 }
-
-
 
 private fun initRemoteConfig() {
     CoroutineScope(Dispatchers.IO).launch {
