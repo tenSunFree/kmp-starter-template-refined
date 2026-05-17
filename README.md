@@ -50,6 +50,11 @@ It can serve as the server-side foundation for authentication, user management, 
 
 ## Features
 
+### Secure Storage
+
+- Android: Secure session storage using DataStore + Tink AEAD AES256-GCM backed by Android Keystore
+- iOS: Secure credential storage using Keychain (`kSecClassGenericPassword`) with `kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly`
+
 ---
 
 ## Tech Stack
@@ -64,6 +69,8 @@ It can serve as the server-side foundation for authentication, user management, 
   Type-safe Navigation3 back stack infrastructure (Defines routes as @Serializable NavKey screens, registers screen subclasses for saveable back stack restoration, renders destinations through NavDisplay with Koin entry providers, and wraps navigation operations inside StarterNavigator with ResultStore support for screen-to-screen result passing)
 - Build Logic Convention Plugins  
   Programmatic Gradle module standardization (Implements reusable Plugin<Project> convention plugins such as CommonPlugin, ComposeMultiplatformPlugin, KoinPlugin, and KoinComposePlugin to apply shared plugins, dependencies, and Compose/Koin configuration consistently across feature modules)
+- Secure Storage  
+  Cross-platform credential protection with platform-native security backends (Android encrypts session data with Tink AEAD AES256-GCM backed by Android Keystore; iOS persists credentials in the system Keychain using `kSecClassGenericPassword` with `kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly`)
 
 ---
 
