@@ -1,18 +1,3 @@
-/*
- *
- *  *
- *  *  * Copyright (c) 2026
- *  *  *
- *  *  * Author: Athar Gul
- *  *  * GitHub: https://github.com/DevAtrii/Kmp-Starter-Template
- *  *  * YouTube: https://www.youtube.com/@devatrii/videos
- *  *  *
- *  *  * All rights reserved.
- *  *
- *  *
- *
- */
-
 package com.sun.kmpstartertemplaterefined.feature_notifications_core
 
 import com.tweener.alarmee.AlarmeeService
@@ -25,7 +10,6 @@ val notificationsCoreModule = module {
         alarmeeService.initialize(
             platformConfiguration = createAlarmeePlatformConfiguration(),
         )
-
         alarmeeService
     }
     single {

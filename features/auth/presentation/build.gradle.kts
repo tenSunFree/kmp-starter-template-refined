@@ -27,7 +27,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.features.auth.domain)
             implementation(projects.starter.ui.utils)
-            implementation(projects.features.resources)
+            implementation(projects.starter.resources)
         }
         androidMain.dependencies {}
         iosMain.dependencies {}

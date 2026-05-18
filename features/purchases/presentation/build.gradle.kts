@@ -53,7 +53,7 @@ kotlin {
         commonMain.dependencies {
             implementation(projects.starter.ui.layouts)
             api(projects.features.purchases.domain)
-            implementation(projects.features.resources)
+            implementation(projects.starter.resources)
             // analytics
             implementation(projects.features.analytics.domain)
         }

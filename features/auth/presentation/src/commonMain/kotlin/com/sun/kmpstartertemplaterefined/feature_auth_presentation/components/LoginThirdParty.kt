@@ -20,11 +20,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sun.kmpstartertemplaterefined.feature_resources.Res
-import com.sun.kmpstartertemplaterefined.feature_resources.login_apple
-import com.sun.kmpstartertemplaterefined.feature_resources.login_fb
-import com.sun.kmpstartertemplaterefined.feature_resources.login_google
-import com.sun.kmpstartertemplaterefined.feature_resources.login_line
+import com.sun.kmpstartertemplaterefined.starter_resources.Res
+import com.sun.kmpstartertemplaterefined.starter_resources.login_apple
+import com.sun.kmpstartertemplaterefined.starter_resources.login_fb
+import com.sun.kmpstartertemplaterefined.starter_resources.login_google
+import com.sun.kmpstartertemplaterefined.starter_resources.login_line
 import org.jetbrains.compose.resources.painterResource
 
 // The `label` parameter allows both LoginCard and RegisterCard to share this component.

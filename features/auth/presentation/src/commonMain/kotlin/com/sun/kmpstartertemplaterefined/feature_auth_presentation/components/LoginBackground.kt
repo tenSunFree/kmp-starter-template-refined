@@ -9,8 +9,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
-import com.sun.kmpstartertemplaterefined.feature_resources.Res
-import com.sun.kmpstartertemplaterefined.feature_resources.login_bg
+import com.sun.kmpstartertemplaterefined.starter_resources.Res
+import com.sun.kmpstartertemplaterefined.starter_resources.login_bg
 import org.jetbrains.compose.resources.painterResource
 
 @Composable

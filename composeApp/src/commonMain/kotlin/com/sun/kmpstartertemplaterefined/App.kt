@@ -35,8 +35,8 @@ import com.sun.kmpstartertemplaterefined.core.datastore.theme.ThemeDataStore
 import com.sun.kmpstartertemplaterefined.core.events.controllers.SnackbarController
 import com.sun.kmpstartertemplaterefined.feature_navigation.StarterNavigation
 import com.sun.kmpstartertemplaterefined.feature_navigation.screens.StarterScreens
-import com.sun.kmpstartertemplaterefined.feature_resources.locale.LocaleProvider
-import com.sun.kmpstartertemplaterefined.feature_resources.locale.StarterLocales
+import com.sun.kmpstartertemplaterefined.starter_resources.locale.LocaleProvider
+import com.sun.kmpstartertemplaterefined.starter_resources.locale.StarterLocales
 import com.sun.kmpstartertemplaterefined.theme.ApplicationTheme
 import com.sun.kmpstartertemplaterefined.ui_utils.composition_locals.LocalThemeMode
 import com.sun.kmpstartertemplaterefined.ui_utils.side_effects.LaunchOnce

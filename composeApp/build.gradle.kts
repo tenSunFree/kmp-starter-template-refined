@@ -76,7 +76,7 @@ kotlin {
             implementation(projects.features.remoteConfig.domain)
             implementation(projects.features.remoteConfig.presentation)
             // resources
-            implementation(projects.features.resources)
+            implementation(projects.starter.resources)
             // Feature Core
             implementation(projects.features.core.data)
             implementation(projects.features.core.domain)

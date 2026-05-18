@@ -17,8 +17,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.unit.dp
-import com.sun.kmpstartertemplaterefined.feature_resources.Res
-import com.sun.kmpstartertemplaterefined.feature_resources.compose_multiplatform
+import com.sun.kmpstartertemplaterefined.starter_resources.Res
+import com.sun.kmpstartertemplaterefined.starter_resources.compose_multiplatform
 import com.sun.kmpstartertemplaterefined.ui_utils.side_effects.ObserveAsEvents
 import org.jetbrains.compose.resources.painterResource
 import org.koin.compose.viewmodel.koinViewModel

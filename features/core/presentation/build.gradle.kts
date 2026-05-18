@@ -63,7 +63,7 @@ kotlin {
                 implementation(libs.kotlin.stdlib)
                 api(projects.starter.ui.layouts)
                 api(projects.features.core.domain)
-                api(projects.features.resources)
+                api(projects.starter.resources)
                 api(projects.features.analytics.domain)
             }
         }

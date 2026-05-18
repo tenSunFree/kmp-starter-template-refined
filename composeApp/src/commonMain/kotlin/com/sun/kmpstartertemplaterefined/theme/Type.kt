@@ -19,13 +19,13 @@ import androidx.compose.material3.Typography
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
-import com.sun.kmpstartertemplaterefined.feature_resources.Res
-import com.sun.kmpstartertemplaterefined.feature_resources.manrope_bold
-import com.sun.kmpstartertemplaterefined.feature_resources.manrope_extra_bold
-import com.sun.kmpstartertemplaterefined.feature_resources.manrope_light
-import com.sun.kmpstartertemplaterefined.feature_resources.manrope_medium
-import com.sun.kmpstartertemplaterefined.feature_resources.manrope_regular
-import com.sun.kmpstartertemplaterefined.feature_resources.manrope_semibold
+import com.sun.kmpstartertemplaterefined.starter_resources.Res
+import com.sun.kmpstartertemplaterefined.starter_resources.manrope_bold
+import com.sun.kmpstartertemplaterefined.starter_resources.manrope_extra_bold
+import com.sun.kmpstartertemplaterefined.starter_resources.manrope_light
+import com.sun.kmpstartertemplaterefined.starter_resources.manrope_medium
+import com.sun.kmpstartertemplaterefined.starter_resources.manrope_regular
+import com.sun.kmpstartertemplaterefined.starter_resources.manrope_semibold
 import org.jetbrains.compose.resources.Font
 
 @Composable
