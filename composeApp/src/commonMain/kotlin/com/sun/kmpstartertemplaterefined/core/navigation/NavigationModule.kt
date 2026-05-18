@@ -1,6 +1,6 @@
 package com.sun.kmpstartertemplaterefined.core.navigation
 
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.LoginScreen
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.screens.LoginScreen
 import com.sun.kmpstartertemplaterefined.core.ui.screens.main.MainScreen
 import com.sun.kmpstartertemplaterefined.core.ui.screens.welcome.WelcomeScreen
 import com.sun.kmpstartertemplaterefined.feature_core_presentation.screens.OnboardingV1Screen
@@ -64,7 +64,7 @@ val navigationModule = module {
     navigation<StarterScreens.Login> { _ ->
         val navigator = StarterNavigator.getCurrent()
         LoginScreen(
-            onGetStartedClick = {
+            onNavigateToMain = {
                 navigator.popAllAndNavigate(route = StarterScreens.Main)
             }
         )

@@ -1,88 +1,63 @@
-package com.sun.kmpstartertemplaterefined.core.ui.screens.login
+package com.sun.kmpstartertemplaterefined.feature_auth_presentation.screens
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.WindowInsets
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.navigationBars
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.statusBars
-import androidx.compose.foundation.layout.windowInsetsPadding
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Button
-import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.SnackbarHost
-import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material3.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.LumaLangBlue
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.LumaLangLoginBackground
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.LumaLangPink
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.LoginCard
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.LoginMode
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.LoginTopBar
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.RegisterCard
-import com.sun.kmpstartertemplaterefined.core.ui.screens.login.components.SwitchLoginModeButton
-import com.sun.kmpstartertemplaterefined.feature_auth_presentation.LoginAction
-import com.sun.kmpstartertemplaterefined.feature_auth_presentation.LoginViewModel
-import com.sun.kmpstartertemplaterefined.feature_auth_presentation.RegisterAction
-import com.sun.kmpstartertemplaterefined.feature_auth_presentation.RegisterViewModel
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.*
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.components.LoginCard
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.components.LoginMode
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.components.LoginTopBar
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.components.LumaLangBlue
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.components.LumaLangLoginBackground
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.components.LumaLangPink
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.components.RegisterCard
+import com.sun.kmpstartertemplaterefined.feature_auth_presentation.components.SwitchLoginModeButton
+import com.sun.kmpstartertemplaterefined.ui_utils.side_effects.ObserveAsEvents
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
 fun LoginScreen(
-    onGetStartedClick: () -> Unit,
+    onNavigateToMain: () -> Unit,
     loginViewModel: LoginViewModel = koinViewModel(),
     registerViewModel: RegisterViewModel = koinViewModel(),
 ) {
-    val loginState by loginViewModel.state.collectAsState()   // ← 新增
+    val loginState by loginViewModel.state.collectAsState()
     val registerState by registerViewModel.state.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }
     var overlayState by remember { mutableStateOf(LoginOverlayState.None) }
     var loginMode by remember { mutableStateOf(LoginMode.Normal) }
     var companyNo by remember { mutableStateOf("") }
     var rememberPassword by remember { mutableStateOf(false) }
-    // Login successful → Redirect
-    LaunchedEffect(loginState.isSuccess) {
-        if (loginState.isSuccess) onGetStartedClick()
-    }
-    // Login error → Snackbar
-    LaunchedEffect(loginState.errorMessage) {
-        loginState.errorMessage?.let { msg ->
-            snackbarHostState.showSnackbar(msg)
-            loginViewModel.onAction(LoginAction.ErrorShown)
+
+    // Use event-based page navigation instead of the isSuccess flag.
+    ObserveAsEvents(flow = loginViewModel.uiEvents) { event ->
+        when (event) {
+            LoginEvents.NavigateToMain -> onNavigateToMain()
+            is LoginEvents.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
         }
     }
-    // Registration successful → Switch back to login page
-    LaunchedEffect(registerState.isSuccess) {
-        if (registerState.isSuccess) {
-            overlayState = LoginOverlayState.Login
-            loginMode = LoginMode.Normal
-            registerViewModel.reset()
+
+    // Use the event to switch back to the login page, instead of using the isSuccess flag.
+    ObserveAsEvents(flow = registerViewModel.uiEvents) { event ->
+        when (event) {
+            RegisterEvents.RegisterSuccess -> {
+                overlayState = LoginOverlayState.Login
+                loginMode = LoginMode.Normal
+                registerViewModel.reset()
+            }
+
+            is RegisterEvents.ShowSnackbar -> snackbarHostState.showSnackbar(event.message)
         }
     }
-    LaunchedEffect(registerState.errorMessage) {
-        registerState.errorMessage?.let { msg ->
-            snackbarHostState.showSnackbar(msg)
-            registerViewModel.onAction(RegisterAction.ErrorShown)
-        }
-    }
+
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -124,10 +99,7 @@ fun LoginScreen(
 
                 LoginOverlayState.Register -> {
                     RegisterCard(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .fillMaxWidth(),
-                        // Form fields
+                        modifier = Modifier.align(Alignment.Center).fillMaxWidth(),
                         email = registerState.email,
                         username = registerState.username,
                         password = registerState.password,
@@ -135,12 +107,9 @@ fun LoginScreen(
                         phone = registerState.phone,
                         fullName = registerState.fullName,
                         selectedGender = registerState.gender,
-                        // OTP
                         otpCode = registerState.otpCode,
                         step = registerState.step,
-                        // Shared
                         isLoading = registerState.isLoading,
-                        // Form callbacks
                         onEmailChange = { registerViewModel.onAction(RegisterAction.EmailChanged(it)) },
                         onUsernameChange = {
                             registerViewModel.onAction(
@@ -172,7 +141,6 @@ fun LoginScreen(
                                 )
                             )
                         },
-                        // OTP callbacks
                         onOtpCodeChange = {
                             registerViewModel.onAction(
                                 RegisterAction.OtpCodeChanged(
@@ -182,7 +150,6 @@ fun LoginScreen(
                         },
                         onVerifyOtpClick = { registerViewModel.onAction(RegisterAction.VerifyOtpClicked) },
                         onResendOtpClick = { registerViewModel.onAction(RegisterAction.ResendOtpClicked) },
-                        // shared callbacks
                         onCloseClick = { overlayState = LoginOverlayState.None },
                         onSubmitClick = { registerViewModel.onAction(RegisterAction.SubmitClicked) },
                     )
@@ -190,9 +157,7 @@ fun LoginScreen(
 
                 LoginOverlayState.Login -> {
                     Column(
-                        modifier = Modifier
-                            .align(Alignment.Center)
-                            .fillMaxWidth(),
+                        modifier = Modifier.align(Alignment.Center).fillMaxWidth(),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         LoginCard(
@@ -204,7 +169,7 @@ fun LoginScreen(
                             isLoading = loginState.isLoading,
                             rememberPassword = rememberPassword,
                             onCompanyNoChange = { companyNo = it },
-                            onAccountChange = { loginViewModel.onAction(LoginAction.EmailChanged(it)) },    // ← 改這裡
+                            onAccountChange = { loginViewModel.onAction(LoginAction.EmailChanged(it)) },
                             onPasswordChange = {
                                 loginViewModel.onAction(
                                     LoginAction.PasswordChanged(
@@ -213,8 +178,8 @@ fun LoginScreen(
                                 )
                             },
                             onRememberPasswordChange = { rememberPassword = it },
-                            onPasswordVisibleChange = { loginViewModel.onAction(LoginAction.TogglePasswordVisible) }, // ← 改這裡
-                            onLoginClick = { loginViewModel.onAction(LoginAction.SubmitClicked) }, // ← 改這裡！
+                            onPasswordVisibleChange = { loginViewModel.onAction(LoginAction.TogglePasswordVisible) },
+                            onLoginClick = { loginViewModel.onAction(LoginAction.SubmitClicked) },
                             onCloseClick = { overlayState = LoginOverlayState.None },
                         )
                         Spacer(modifier = Modifier.height(16.dp))

@@ -26,6 +26,8 @@ kotlin {
     sourceSets {
         commonMain.dependencies {
             implementation(projects.features.auth.domain)
+            implementation(projects.starter.ui.utils)
+            implementation(projects.features.resources)
         }
         androidMain.dependencies {}
         iosMain.dependencies {}

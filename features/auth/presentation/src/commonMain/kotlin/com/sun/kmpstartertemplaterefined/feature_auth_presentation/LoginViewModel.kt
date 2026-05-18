@@ -1,22 +1,18 @@
 package com.sun.kmpstartertemplaterefined.feature_auth_presentation
 
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.sun.kmpstartertemplaterefined.feature_auth_domain.logics.LoginLogic
 import com.sun.kmpstartertemplaterefined.feature_auth_domain.models.LoginParams
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import com.sun.kmpstartertemplaterefined.ui_utils.viewmodels.MviViewModel
 import kotlinx.coroutines.launch
 
 class LoginViewModel(
     private val loginLogic: LoginLogic,
-) : ViewModel() {
+) : MviViewModel<LoginState, LoginAction, LoginEvents>() {
 
-    private val _state = MutableStateFlow(LoginState())
-    val state: StateFlow<LoginState> = _state.asStateFlow()
+    override val initialState get() = LoginState()
 
-    fun onAction(action: LoginAction) {
+    override fun onAction(action: LoginAction) {
         when (action) {
             is LoginAction.EmailChanged ->
                 _state.value = _state.value.copy(email = action.value)
@@ -39,13 +35,16 @@ class LoginViewModel(
         viewModelScope.launch {
             loginLogic(LoginParams(email = s.email.trim(), password = s.password))
                 .onSuccess {
-                    _state.value = _state.value.copy(isLoading = false, isSuccess = true)
+                    _state.value = _state.value.copy(isLoading = false)
+                    emitEvent(LoginEvents.NavigateToMain)
                 }
                 .onFailure { error ->
+                    val message = error.message ?: "登入失敗，請確認帳號密碼"
                     _state.value = _state.value.copy(
                         isLoading = false,
-                        errorMessage = error.message ?: "登入失敗，請確認帳號密碼",
+                        errorMessage = message,
                     )
+                    emitEvent(LoginEvents.ShowSnackbar(message))
                 }
         }
     }

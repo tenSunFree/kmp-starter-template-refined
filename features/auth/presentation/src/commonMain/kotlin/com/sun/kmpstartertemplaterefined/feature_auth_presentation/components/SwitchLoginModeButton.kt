@@ -1,4 +1,4 @@
-package com.sun.kmpstartertemplaterefined.core.ui.screens.login.components
+package com.sun.kmpstartertemplaterefined.feature_auth_presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box

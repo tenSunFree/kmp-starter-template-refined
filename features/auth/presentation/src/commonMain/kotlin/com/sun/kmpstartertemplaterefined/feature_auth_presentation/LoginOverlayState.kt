@@ -1,4 +1,4 @@
-package com.sun.kmpstartertemplaterefined.core.ui.screens.login
+package com.sun.kmpstartertemplaterefined.feature_auth_presentation
 
 // What cards should be displayed on the control screen
 internal enum class LoginOverlayState {
