@@ -22,4 +22,7 @@ sealed class StarterScreens : NavKey {
 
     @Serializable
     data object Main : StarterScreens()
+
+    @Serializable
+    data class LessonPlayer(val lessonId: String) : StarterScreens()
 }

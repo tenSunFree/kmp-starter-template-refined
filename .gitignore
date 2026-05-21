@@ -113,3 +113,6 @@ gemini.properties
 
 # ===== Logs =====
 *.log
+
+# Personal development notes, not committed to Git
+notes/

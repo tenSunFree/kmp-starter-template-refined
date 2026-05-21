@@ -1,6 +1,7 @@
 package com.sun.kmpstartertemplaterefined.core.ui.screens.main.tabs
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,6 +24,8 @@ import com.sun.kmpstartertemplaterefined.core.ui.screens.main.tabs.shared.TabSea
 import com.sun.kmpstartertemplaterefined.feature_lessons_domain.models.Lesson
 import com.sun.kmpstartertemplaterefined.feature_lessons_presentation.LessonsAction
 import com.sun.kmpstartertemplaterefined.feature_lessons_presentation.LessonsViewModel
+import com.sun.kmpstartertemplaterefined.feature_navigation.StarterNavigator
+import com.sun.kmpstartertemplaterefined.feature_navigation.screens.StarterScreens
 import com.sun.kmpstartertemplaterefined.ui_components.image.CoilImage
 import org.koin.compose.viewmodel.koinViewModel
 
@@ -88,8 +91,15 @@ fun VideoTab(
                 }
                 // Information available
                 else -> {
+                    val navigator = StarterNavigator.getCurrent()
+
                     state.lessons.forEach { lesson ->
-                        VideoCard(lesson = lesson)
+                        VideoCard(
+                            lesson = lesson,
+                            onClick = { selected ->
+                                navigator.navigateTo(StarterScreens.LessonPlayer(lessonId = selected.id))
+                            }
+                        )
                         Spacer(modifier = Modifier.height(24.dp))
                     }
                 }
@@ -103,8 +113,8 @@ fun VideoTab(
 }
 
 @Composable
-fun VideoCard(lesson: Lesson) {
-    Column(modifier = Modifier.fillMaxWidth()) {
+fun VideoCard(lesson: Lesson, onClick: (Lesson) -> Unit = {}) {
+    Column(modifier = Modifier.fillMaxWidth().clickable { onClick(lesson) }) {
         Box(
             modifier = Modifier
                 .fillMaxWidth()

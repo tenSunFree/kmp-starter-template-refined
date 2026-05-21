@@ -9,15 +9,14 @@ import kotlinx.serialization.modules.subclass
 
 @Composable
 fun rememberStarterBackStack(vararg initialScreens: NavKey): NavBackStack<NavKey> {
-    val backstack = rememberNavBackStack(
-        elements = initialScreens
-    ) {
+    val backstack = rememberNavBackStack(elements = initialScreens) {
         subclass(StarterScreens.Welcome::class)
         subclass(StarterScreens.Purchases::class)
         subclass(StarterScreens.Onboarding::class)
         subclass(StarterScreens.Splash::class)
         subclass(StarterScreens.Login::class)
         subclass(StarterScreens.Main::class)
+        subclass(StarterScreens.LessonPlayer::class)
     }
     return backstack
 }

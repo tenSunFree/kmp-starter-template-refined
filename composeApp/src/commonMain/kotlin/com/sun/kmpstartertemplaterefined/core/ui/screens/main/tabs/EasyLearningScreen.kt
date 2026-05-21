@@ -58,7 +58,7 @@ private fun TopBar() {
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Text(
-            text = "FUNDAY",
+            text = "LumaLang",
             fontSize = 28.sp,
             fontWeight = FontWeight.ExtraBold,
             color = TextDark,
